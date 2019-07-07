@@ -1,10 +1,24 @@
 import canvasapi
+import unittest
 import sys
 
-url: str = 'https://canvas.ucdavis.edu'
-password: str = sys.argv[1]  # password to be passed as first command line argument
-canvas = canvasapi.Canvas(url, password)
-course = canvas.get_course(1599)
-print(course.name)
-for user in course.get_users():
-    print(user)
+class CanvasConnect(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        cls.url = 'https://canvas.ucdavis.edu'
+        cls.password = ''  # put your authorization token here
+    @classmethod
+    def tearDownClass(cls) -> None:
+        super().tearDownClass()
+
+
+    def test_connect(self):
+        canvas = canvasapi.Canvas(self.url, self.password)
+        course = canvas.get_course(1599)
+        self.assertEqual(course.name, 'Matthew Butner Sandbox')
+
+
+if __name__ == '__main__':
+    unittest.main()
