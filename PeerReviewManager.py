@@ -4,13 +4,14 @@ import csv
 from datetime import datetime
 
 def main():
-    # Canvas API URL
+    # Canvas URL
     API_URL = "https://canvas.ucdavis.edu"
-    # Canvas API key
+    # Canvas API key from configurations
     API_KEY = sys.argv[1]
 
     # Make a new Canvas object
     canvas = canvasapi.Canvas(API_URL, API_KEY)
+    # Make a new Course object
     course = canvas.get_course(1599)
 
     print("COURSE NAME:")
@@ -35,10 +36,11 @@ def main():
     # tell if students haven't completed peer review
     # student who doesnt submit/doesnt do peer review
 
-def writeToFile():
-    with open(..., 'wb', newline ='') as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        wr.writerow(mylist)
+
+# def writeToFile():
+#     with open(..., 'wb', newline ='') as myfile:
+#         # figure out what to do here
+
 
 def printsubmissions(course, x):
     assignments = course.get_assignments()
