@@ -3,6 +3,7 @@ import canvasapi
 import csv
 from datetime import datetime
 
+
 def main():
     # Canvas URL
     API_URL = "https://canvas.ucdavis.edu"
@@ -14,48 +15,46 @@ def main():
     # Make a new Course object
     course = canvas.get_course(1599)
 
-    print("COURSE NAME:")
-    print(course.name)
+    completed_reviews(course, 0)
 
+
+# only prints completed peer reviews
+def completed_reviews(course, x):
+    review_list = []
     assignments = course.get_assignments()
-
-    # prints all reviews
-    print("REVIEWS:")
-    # print(assignments[0].get_peer_reviews())
-    for review in assignments[0].get_peer_reviews():
-        print(review, "\n", review.user_id, "\n", review.workflow_state)
-        print()
-
-    # only prints completed peer reviews
-    for review in assignments[0].get_peer_reviews():
+    for review in assignments[x].get_peer_reviews():
         if review.workflow_state == "completed":
             print(review)
             print(review.user_id)
             print()
-
-    # tell if students haven't completed peer review
-    # student who doesnt submit/doesnt do peer review
-
-
-# def writeToFile():
-#     with open(..., 'wb', newline ='') as myfile:
-#         # figure out what to do here
+            review_list.append(review.user_id)      # FIGURE OUT WHAT INFO YOU WANT HERE
+    return review_list
+# tell if students haven't completed peer review
+# student who doesnt submit/doesnt do peer review
 
 
-def printsubmissions(course, x):
+# prints all reviews
+def print_reviews(course, x):
+    print("REVIEWS:")
     assignments = course.get_assignments()
+    for review in assignments[x].get_peer_reviews():
+        print(review, "\n", review.user_id, "\n", review.workflow_state)
+        print()
+
+
+def print_submissions(course, x):
     print("SUBMISSIONS")
+    assignments = course.get_assignments()
     for submission in assignments[x].get_submissions():
         print(submission)
         print(submission.workflow_state)
         print("Late?:", submission.late)
         print(submission.score)
-        print(submission.grade)
-        print()
+        print(submission.grade, "\n")
 
 
 # prints all assignments and assignment number
-def printassignments(course):
+def print_assignments(course):
     assignments = course.get_assignments()
     print("\nASSIGNMENTS:")
     for assignment in assignments:
@@ -64,14 +63,15 @@ def printassignments(course):
 
 
 # prints all people in course and ID
-def printpeople(course):
+def print_people(course):
     print("\nPEOPLE:")
     users = course.get_users()
     for user in users:
         print(user)
 
 
-def createassignment(course):
+# create new assignment
+def create_new_assignment(course):
     new_assignment = course.create_assignment({
         'name': 'Assignment 1',
         'submission_types': ['online_upload'],
@@ -84,4 +84,11 @@ def createassignment(course):
     })
     print(new_assignment)
 
+
+def print_course_name(course):
+    print("COURSE NAME:")
+    print(course.name)
+
+
 main()
+
