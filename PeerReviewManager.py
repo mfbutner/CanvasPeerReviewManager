@@ -9,17 +9,21 @@ def main():
     API_URL = "https://canvas.ucdavis.edu"
     # Canvas API key from configurations
     API_KEY = sys.argv[1]
-
     # Make a new Canvas object
     canvas = canvasapi.Canvas(API_URL, API_KEY)
-    # Make a new Course object
+    # Make a new Course object with course number
     course = canvas.get_course(1599)
 
-    completed_reviews(course, 0)
+
+def write_to_file(list):
+    with open('csv_file.csv', 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writeheader("Student 1:")
+        writer.writerow({'first_name': 'Baked', 'last_name': 'Beans'})
 
 
 # only prints completed peer reviews
-def completed_reviews(course, x):
+def print_completed_reviews(course, x: int):
     review_list = []
     assignments = course.get_assignments()
     for review in assignments[x].get_peer_reviews():
@@ -33,8 +37,8 @@ def completed_reviews(course, x):
 # student who doesnt submit/doesnt do peer review
 
 
-# prints all reviews
-def print_reviews(course, x):
+# prints all reviews, takes course and assignment number as paramters
+def print_reviews(course: canvasapi, x: int):
     print("REVIEWS:")
     assignments = course.get_assignments()
     for review in assignments[x].get_peer_reviews():
@@ -42,7 +46,8 @@ def print_reviews(course, x):
         print()
 
 
-def print_submissions(course, x):
+# prints submissions, takes course and assignment number as parameters
+def print_submissions(course, x: int):
     print("SUBMISSIONS")
     assignments = course.get_assignments()
     for submission in assignments[x].get_submissions():
