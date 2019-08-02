@@ -1,6 +1,7 @@
 import sys
 import canvasapi
 import csv
+import json
 from datetime import datetime
 
 
@@ -13,6 +14,10 @@ def main():
     canvas = canvasapi.Canvas(API_URL, API_KEY)
     # Make a new Course object with course number
     course = canvas.get_course(1599)
+
+
+def makejson():
+    print()
 
 
 def write_to_file(list):
@@ -96,4 +101,3 @@ def print_course_name(course):
 
 
 main()
-
