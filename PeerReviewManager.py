@@ -15,9 +15,21 @@ def main():
     # Make a new Course object with course number
     course = canvas.get_course(1599)
 
+    assignments = course.get_assignments()
+    assignment = assignments[0]
+    name = assignment.name
+    ID = assignment.id
+    print("name: ", name)
+    print("id: ", ID)
+    rubric = {}
+    rubric["max_points"] = (assignment.rubric)[0]['points']         # gets points of assignment from rubric
+    rubric["categories"] = 
+
+
+
 
 def makejson():
-    print()
+    json.dumps()
 
 
 def write_to_file(list):
@@ -50,6 +62,7 @@ def print_reviews(course: canvasapi, x: int):
         print(review, "\n", review.user_id, "\n", review.workflow_state)
         print()
 
+#rubric.include_peer_review()
 
 # prints submissions, takes course and assignment number as parameters
 def print_submissions(course, x: int):
