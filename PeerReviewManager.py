@@ -15,29 +15,6 @@ def main():
     # Make a new Course object with course number
     course = canvas.get_course(1599)
 
-    assignments = course.get_assignments()
-    assignment = assignments[0]
-    name = assignment.name
-    ID = assignment.id
-    print("name: ", name)
-    print("id: ", ID)
-    rubric = {}
-    rubric["max_points"] = (assignment.rubric)[0]['points']         # gets points of assignment from rubric
-    rubric["categories"] = 
-
-
-
-
-def makejson():
-    json.dumps()
-
-
-def write_to_file(list):
-    with open('csv_file.csv', 'w') as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writeheader("Student 1:")
-        writer.writerow({'first_name': 'Baked', 'last_name': 'Beans'})
-
 
 # only prints completed peer reviews
 def print_completed_reviews(course, x: int):
