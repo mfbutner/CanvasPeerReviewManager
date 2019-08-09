@@ -17,12 +17,12 @@ def main():
     assignments = course.get_assignments()
     assignment = assignments[0]
     name = assignment.name
-    id = assignment.id
-    points = assignment.points_possible
+    assignment_id = assignment.id
+    max_points = assignment.points_possible
 
     rubric = make_rubric(assignment)        # gets dictionary with categories of assignment and points
 
-    make_student_list(course, assignment)
+    students = make_student_list(course, assignment)
 
 
 # accepts assignment and returns a dictionary of all categories in rubric with name and max_points
@@ -43,36 +43,61 @@ def make_rubric(assignment):
 
 # takes in assignment & course, will return list of students that have their info, scores, and peer reviews
 def make_student_list(course, assignment):
-    students = []
-    if not assignment.has_submitted_submissions:       # makes sure there is at least 1 submission
+    students = []                                       # list of student dictionaries
+    if not assignment.has_submitted_submissions:        # makes sure there is at least 1 submission
         return students
 
-    for submission in assignment.get_submissions():
-        print(submission.score)
-        print(submission.user_id)
-        print(course.get_user(submission.user_id))
-        print("\n")
+    i = 0
+    for submission in assignment.get_submissions():     # goes through all of the submissions for assignment
+        thisStudent = {}                                # creates new dictionary for each student
+        thisStudent = get_student_info(course, submission, thisStudent)     # calls function to get student info
+        score = submission.score
 
-    # for student :
-        # calls get student info
+        # FOR EACH STUDENT:
         # calls get rubric stats
         # calls get peer reviews
+
+        thisStudent["rubric_stats"] = get_student_rubric_stats()
+        thisStudent["reviews"] = get_student_peer_reviews()
+
+        students[i] = thisStudent                       # adds current student to list of students
+        i += 1
     return students
 
 
-def get_student_info(): # dont know what to pass yet
-    # maybe just pass the students [] list and append info straight to it and then return it?
-    # could also make new [] with info and return list, can be iterated over in make_student_list and added to students
-    return
+# takes course, a single submission, and dictionary for student, returns filled dictionary with student info
+def get_student_info(course, submission, thisStudent):
+    user_id = submission.user_id
+    # course.get_user(user_id).student_id      FIND OUT HOW TO GET STUDENT/CANVAS ID
+    # course.get_user(user_id).canvas_id
+    thisStudent["sis_login_id"] = course.get_user(user_id).login_id
+
+    name = course.get_user(user_id).name
+    thisStudent["first_name"], thisStudent["last_name"] = name.split()  # gets first and last name of each student
+
+    thisStudent["canvas_id"] = 0                # sets attributes to 0, not sure how to get them yet
+    thisStudent["student_id"] = 0
+    thisStudent["total"] = 0
+    thisStudent["mean"] = 0
+    thisStudent["median"] = 0
+    thisStudent["mode"] = 0
+    thisStudent["std_dev"] = 0
+
+    return thisStudent
 
 
 def get_student_rubric_stats():     # might need to pass assignment and student name/ID
-    return
+    rubric_stats = []
+
+    return rubric_stats
 
 
 def get_student_peer_reviews():     # might need to pass assignment and student name/ID
     # check if assignment even has peer reviews
-    return
+    peer_reviews = []
+
+
+    return peer_reviews
 
 
 # prints all people in course and ID
