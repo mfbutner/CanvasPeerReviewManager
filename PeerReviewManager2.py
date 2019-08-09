@@ -25,8 +25,9 @@ def main():
     for category in rubric["categories"]:
         max_points += category["max_points"]
 
-
-    students =  make_student_list(assignment)
+    points = assignment.points_possible
+    print(points)
+    print(max_points)
 
 
 # accepts assignment and returns a dictionary of all categories in rubric with name and max_points
@@ -41,11 +42,31 @@ def make_rubric(assignment):
         category["max_points"] = element['points']
         allcategories.append(category)  # adds each category to list of categories
     rubric["categories"] = allcategories
-
     return rubric
 
 
 def make_student_list(assignment):
     students = []
-
+    # for student :
+        # calls get student info
+        # calls get rubric stats
+        # calls get peer reviews
     return students
+
+
+def get_student_info(): # dont know what to pass yet
+    # maybe just pass the students [] list and append info straight to it and then return it?
+    # could also make new list with that info and return that list, which can be iterated over in make_student_list and added to students[]
+
+    return
+
+
+def get_student_rubric_stats(): #might need to pass assignment and student name/ID
+
+    return
+
+
+def get_student_peer_reviews(): # might need to pass assignment and student name/ID
+    # check if assignment even has peer reviews
+
+    return
