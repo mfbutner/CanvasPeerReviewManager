@@ -17,17 +17,12 @@ def main():
     assignments = course.get_assignments()
     assignment = assignments[0]
     name = assignment.name
-    ID = assignment.id
+    id = assignment.id
+    points = assignment.points_possible
 
     rubric = make_rubric(assignment)        # gets dictionary with categories of assignment and points
 
-    max_points = 0          # gets max points of assignment by adding up max_points for each category
-    for category in rubric["categories"]:
-        max_points += category["max_points"]
-
-    points = assignment.points_possible
-    print(points)
-    print(max_points)
+    make_student_list(assignment)
 
 
 # accepts assignment and returns a dictionary of all categories in rubric with name and max_points
@@ -47,6 +42,10 @@ def make_rubric(assignment):
 
 def make_student_list(assignment):
     students = []
+    if not assignment.has_submitted_submissions:       # makes sure there is at least 1 submission
+        return students
+    for submission in assignment.get_submissions():
+        print(submission.score)
     # for student :
         # calls get student info
         # calls get rubric stats
@@ -56,17 +55,17 @@ def make_student_list(assignment):
 
 def get_student_info(): # dont know what to pass yet
     # maybe just pass the students [] list and append info straight to it and then return it?
-    # could also make new list with that info and return that list, which can be iterated over in make_student_list and added to students[]
-
+    # could also make new [] with info and return list, can be iterated over in make_student_list and added to students
     return
 
 
-def get_student_rubric_stats(): #might need to pass assignment and student name/ID
-
+def get_student_rubric_stats():     # might need to pass assignment and student name/ID
     return
 
 
-def get_student_peer_reviews(): # might need to pass assignment and student name/ID
+def get_student_peer_reviews():     # might need to pass assignment and student name/ID
     # check if assignment even has peer reviews
-
     return
+
+
+main()
