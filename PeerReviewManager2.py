@@ -5,25 +5,33 @@ import json
 
 
 def main():
-    # Canvas URL
-    API_URL = "https://canvas.ucdavis.edu"
-    # Canvas API key from configurations
-    API_KEY = sys.argv[1]
-    # Make a new Canvas object
-    canvas = canvasapi.Canvas(API_URL, API_KEY)
-    # Make a new Course object with course number
-    course = canvas.get_course(1599)
+    API_URL = "https://canvas.ucdavis.edu"              # Canvas URL
+    API_KEY = sys.argv[1]                               # Canvas API key from configurations
+    canvas = canvasapi.Canvas(API_URL, API_KEY)         # Make a new Canvas object
+    course = canvas.get_course(1599)                    # Make a new Course object with course number
 
     assignments = course.get_assignments()
     assignment = assignments[0]
-    name = assignment.name
-    assignment_id = assignment.id
+
+    # maybe iterate over all assignments
+    this_assignment = {}        # creates empty dictionary for assignment
+    this_assignment = make_assignment_dic(assignment, this_assignment)
+
+
+def make_assignment_dic(course, assignment, this_assignent):
+    this_assignent["name"] = assignment.name
+    this_assignent["assignment_id"] = assignment.id
     max_points = assignment.points_possible
 
-    rubric = make_rubric(assignment)        # gets dictionary with categories of assignment and points
+    this_assignent["mean"] = 0                # sets attributes to 0, not sure how to get them yet
+    this_assignent["median"] = 0
+    this_assignent["mode"] = 0
+    this_assignent["std_dev"] = 0
 
-    students = make_student_list(course, assignment)
+    this_assignent["rubric"] = make_rubric(assignment)        # gets dict with categories of assignment and points
+    this_assignent["students"] = make_student_list(course, assignment)      # gets list of student dictionaries
 
+    return this_assignent
 
 # accepts assignment and returns a dictionary of all categories in rubric with name and max_points
 def make_rubric(assignment):
@@ -51,11 +59,8 @@ def make_student_list(course, assignment):
     for submission in assignment.get_submissions():     # goes through all of the submissions for assignment
         thisStudent = {}                                # creates new dictionary for each student
         thisStudent = get_student_info(course, submission, thisStudent)     # calls function to get student info
-        score = submission.score
 
-        # FOR EACH STUDENT:
-        # calls get rubric stats
-        # calls get peer reviews
+        score = submission.score
 
         thisStudent["rubric_stats"] = get_student_rubric_stats()
         thisStudent["reviews"] = get_student_peer_reviews()
@@ -96,16 +101,7 @@ def get_student_peer_reviews():     # might need to pass assignment and student 
     # check if assignment even has peer reviews
     peer_reviews = []
 
-
     return peer_reviews
-
-
-# prints all people in course and ID
-def print_people(course):
-    print("\nPEOPLE:")
-    users = course.get_users()
-    for user in users:
-        print(user)
 
 
 main()
