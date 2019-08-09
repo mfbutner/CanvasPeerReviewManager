@@ -22,30 +22,37 @@ def main():
 
     rubric = make_rubric(assignment)        # gets dictionary with categories of assignment and points
 
-    make_student_list(assignment)
+    make_student_list(course, assignment)
 
 
 # accepts assignment and returns a dictionary of all categories in rubric with name and max_points
 def make_rubric(assignment):
-    rubric = {}  # make empty dictionary for rubric
+    rubric = dict()  # make empty dictionary for rubric
     rubric["max_points"] = (assignment.rubric)[0]['points']  # gets points of assignment from rubric
 
     allcategories = []
-    for element in assignment.rubric:  # iterates over all individual categories (elements) of the assignment rubric
-        category = {}  # makes new dictionary for each category
+    for element in assignment.rubric:                       # iterates over all categories of the assignment rubric
+        category = dict()                                   # makes new dictionary for each category
         category["category name"] = element['description']  # adds name and points to each category
         category["max_points"] = element['points']
-        allcategories.append(category)  # adds each category to list of categories
+        allcategories.append(category)                      # adds each category to list of categories
     rubric["categories"] = allcategories
+
     return rubric
 
 
-def make_student_list(assignment):
+# takes in assignment & course, will return list of students that have their info, scores, and peer reviews
+def make_student_list(course, assignment):
     students = []
     if not assignment.has_submitted_submissions:       # makes sure there is at least 1 submission
         return students
+
     for submission in assignment.get_submissions():
         print(submission.score)
+        print(submission.user_id)
+        print(course.get_user(submission.user_id))
+        print("\n")
+
     # for student :
         # calls get student info
         # calls get rubric stats
@@ -66,6 +73,14 @@ def get_student_rubric_stats():     # might need to pass assignment and student 
 def get_student_peer_reviews():     # might need to pass assignment and student name/ID
     # check if assignment even has peer reviews
     return
+
+
+# prints all people in course and ID
+def print_people(course):
+    print("\nPEOPLE:")
+    users = course.get_users()
+    for user in users:
+        print(user)
 
 
 main()
