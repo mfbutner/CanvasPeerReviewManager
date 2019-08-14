@@ -15,7 +15,7 @@ def main():
 
     # maybe iterate over all assignments
     this_assignment = {}        # creates empty dictionary for assignment
-    this_assignment = make_assignment_dic(assignment, this_assignment)
+    this_assignment = make_assignment_dic(course, assignment, this_assignment)
 
 
 def make_assignment_dic(course, assignment, this_assignent):
@@ -52,21 +52,16 @@ def make_rubric(assignment):
 # takes in assignment & course, will return list of students that have their info, scores, and peer reviews
 def make_student_list(course, assignment):
     students = []                                       # list of student dictionaries
-    if not assignment.has_submitted_submissions:        # makes sure there is at least 1 submission
-        return students
 
-    i = 0
     for submission in assignment.get_submissions():     # goes through all of the submissions for assignment
         thisStudent = {}                                # creates new dictionary for each student
         thisStudent = get_student_info(course, submission, thisStudent)     # calls function to get student info
 
-        score = submission.score
-
-        thisStudent["rubric_stats"] = get_student_rubric_stats()
         thisStudent["reviews"] = get_student_peer_reviews()
+        thisStudent["rubric_stats"] = get_student_rubric_stats()
 
-        students[i] = thisStudent                       # adds current student to list of students
-        i += 1
+        students.append(thisStudent)                       # adds current student to list of students
+
     return students
 
 
