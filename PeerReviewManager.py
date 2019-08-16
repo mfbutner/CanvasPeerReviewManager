@@ -39,7 +39,8 @@ def print_reviews(course: canvasapi, x: int):
         print(review, "\n", review.user_id, "\n", review.workflow_state)
         print()
 
-#rubric.include_peer_review()
+# rubric.include_peer_review()
+
 
 # prints submissions, takes course and assignment number as parameters
 def print_submissions(course, x: int):
