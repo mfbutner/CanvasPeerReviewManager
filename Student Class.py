@@ -3,7 +3,9 @@ import canvasapi
 import csv
 import json
 
+
 class Student:
+
     def __init__(self, course, assignment, submission):
         user_id = submission.user_id
         self.sis_login_id = course.get_user(user_id).login_id
@@ -15,33 +17,40 @@ class Student:
         self.median = self.median_of_reviews(submission)
         self.mode = self.mode_of_reviews(submission)
         self.std_dev = self.std_dev_of_reviews(submission)
-        self.reviews = self.get_reviews(submission)
+        self.reviews = self.get_reviews(assignment)
         self.total_score = submission.score
         self.late = submission.late
 
-    def get_reviews(self, submission):
+    @staticmethod
+    def get_reviews(assignment):
         review_list = []
-        for review in submission.get_peer_reviews():
-            if review.workflow_state == "completed":
-                review_list.append(review.user_id)  # FIGURE OUT WHAT INFO YOU WANT HERE
+        for review in assignment.get_peer_reviews():
+            print(review.asset_type)
+            print(review.assessor_id, " ", review.id)
+            # if review.workflow_state == "completed":
+            #     review_list.append(review.user_id)
         return review_list
 
-    def mean_of_reviews(self, submission):
+    @staticmethod
+    def mean_of_reviews(submission):
         mean = 0
 
         return mean
 
-    def median_of_reviews(self, submission):
+    @staticmethod
+    def median_of_reviews(submission):
         median = 0
 
         return median
 
-    def mode_of_reviews(self, submission):
+    @staticmethod
+    def mode_of_reviews(submission):
         mode = 0
 
         return mode
 
-    def std_dev_of_reviews(self, submission):
+    @staticmethod
+    def std_dev_of_reviews(submission):
         std_dev = 0
 
         return std_dev
@@ -66,4 +75,3 @@ assignment = assignments[0]
 
 for submission in assignment.get_submissions():
     student = Student(course, assignment, submission)
-    print(student.reviews)
