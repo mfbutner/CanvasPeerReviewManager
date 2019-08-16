@@ -39,18 +39,20 @@ def get_reviews(course, assignment, submission):            # reviews have attri
     review_list = []
 
     for review in assignment.get_peer_reviews():
-        print(review)
-        user_id = review.user_id
+        # print(review)
+        student_id = review.user_id
         student_name = course.get_user(review.user_id).name
 
         reviewer_id = review.assessor_id
         reviewer_name = course.get_user(review.assessor_id).name
 
 
+        print(submission.get_submission_peer_reviews)
+        # for submissionReview in submission.get_submission_peer_reviews():
+        #     print(submissionReview)
+
 
         print()
-        # if review.workflow_state == "completed":
-        #     review_list.append(review.user_id)
     return review_list
 
 
@@ -84,10 +86,11 @@ def main():
     assignments = course.get_assignments()
     assignment = assignments[0]
 
-    submissions = assignment.get_submissions()
-    student = Student(course, assignment, submissions[0])
-    # for submission in assignment.get_submissions():
-    #     student = Student(course, assignment, submission)
+    # submissions = assignment.get_submissions()
+    # student = Student(course, assignment, submissions[0])
+    for submission in assignment.get_submissions():
+        student = Student(course, assignment, submission)
+        print("NEXT:")
 
 
 main()
