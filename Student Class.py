@@ -22,7 +22,7 @@ class Student:
         self.mode = self.mode_of_reviews(submission)
         self.std_dev = self.std_dev_of_reviews(submission)
 
-        self.this_students_reviews = self.get_reviews(self, course, assignment, submission)
+        self.this_students_reviews = self.get_reviews(self, course, assignment)
         self.rubric_stats = self.get_rubric_stats()
 
     @staticmethod
@@ -55,7 +55,7 @@ class Student:
         return std_dev
 
     @staticmethod
-    def get_reviews(self, course, assignment, submission):  # reviews have attribute "to_json"
+    def get_reviews(self, course, assignment):  # reviews have attribute "to_json"
         review_list = []
 
         for review in assignment.get_peer_reviews():
@@ -72,8 +72,20 @@ class Student:
 class StudentReview:
 
     def __init__(self, course, assignment, review):
-        self.reviewer_id = review.assessor_id
-        self.reviewer_name = course.get_user(self.reviewer_id).name
+        self.canvas_id = review.assessor_id
+        self.sis_login_id = course.get_user(self.canvas_id).login_id
+        self.student_id = 0
+
+        self.reviewer_name = course.get_user(self.canvas_id).name
+        self.first, self.second = self.reviewer_name.split()
+
+        self.rubric = self.get_reviewer_assessment(assignment, review)
+        self.total_score = 0
+
+    def get_reviewer_assessment(self, assignment, review):
+        assessment = {}
+
+        return assessment
 
 
 class AssignmentPeerReviews:
