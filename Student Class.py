@@ -108,7 +108,7 @@ def main():
     # assignment = assignments[0]
 
     for assignment in course.get_assignments():
-        print("ASSIGNMENT:", assignment.name)
+        print("Assignment:", assignment.name)
         for submission in assignment.get_submissions():
             student = Student(course, assignment, submission)
 
