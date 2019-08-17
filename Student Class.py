@@ -39,18 +39,16 @@ def get_reviews(course, assignment, submission):            # reviews have attri
     review_list = []
 
     for review in assignment.get_peer_reviews():
-        # print(review)
         student_id = review.user_id
         student_name = course.get_user(review.user_id).name
 
-        reviewer_id = review.assessor_id
-        reviewer_name = course.get_user(review.assessor_id).name
-
-
-        print(submission.get_submission_peer_reviews)
-        # for submissionReview in submission.get_submission_peer_reviews():
-        #     print(submissionReview)
-
+        id = submission.user_id
+        name = course.get_user(id).name
+        if name == student_name:
+            print(student_name)
+            reviewer_id = review.assessor_id
+            reviewer_name = course.get_user(reviewer_id).name
+            print(reviewer_name)
 
         print()
     return review_list
