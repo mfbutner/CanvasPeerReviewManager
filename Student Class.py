@@ -104,8 +104,6 @@ class AssignmentPeerReviews:
 def main():
     canvas = canvasapi.Canvas("https://canvas.ucdavis.edu", sys.argv[1])
     course = canvas.get_course(1599)
-    # assignments = course.get_assignments()
-    # assignment = assignments[0]
 
     for assignment in course.get_assignments():
         print("Assignment:", assignment.name)
