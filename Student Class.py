@@ -25,31 +25,26 @@ class Student:
         self.this_students_reviews = self.get_reviews(self, course, assignment, submission)
         self.rubric_stats = self.get_rubric_stats()
 
-    @staticmethod
-    def get_rubric_stats():
+    def get_rubric_stats(self):
         stats = []
         return stats
 
-    @staticmethod
-    def mean_of_reviews(submission):
+    def mean_of_reviews(self, submission):
         mean = 0
 
         return mean
 
-    @staticmethod
-    def median_of_reviews(submission):
+    def median_of_reviews(self, submission):
         median = 0
 
         return median
 
-    @staticmethod
-    def mode_of_reviews(submission):
+    def mode_of_reviews(self, submission):
         mode = 0
 
         return mode
 
-    @staticmethod
-    def std_dev_of_reviews(submission):
+    def std_dev_of_reviews(self, submission):
         std_dev = 0
 
         return std_dev
@@ -79,14 +74,17 @@ class StudentReview:
         self.reviewer_name = course.get_user(self.canvas_id).name
         self.first, self.second = self.reviewer_name.split()
 
-        self.rubric = self.get_reviewer_assessment(self, assignment, review, submission)
+        self.rubric = self.get_reviewer_assessment(self, course, assignment, review, submission)
         self.total_score = 0
 
     @staticmethod
-    def get_reviewer_assessment(self, assignment, review, submission):
+    def get_reviewer_assessment(self, course, assignment, review, submission):
         assessment = {}
-        # print(submission.body)
-        # print(submission.get_submission_peer_reviews)
+
+        rubric_id = assignment.rubric
+        r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
+        print(r.assessments["score"])
+
         return assessment
 
 
@@ -104,11 +102,27 @@ class AssignmentPeerReviews:
 def main():
     canvas = canvasapi.Canvas("https://canvas.ucdavis.edu", sys.argv[1])
     course = canvas.get_course(1599)
+    
+    get_assignment_peer_reviews()
 
-    for assignment in course.get_assignments():
-        print("Assignment:", assignment.name)
-        for submission in assignment.get_submissions():
-            student = Student(course, assignment, submission)
+
+
+    # for rubric in course.get_rubrics():
+    #     print(rubric)
+    #
+    # r = course.get_rubric(14843, include=["peer_assessments"], style="full")
+    #
+    # for elem in r.assessments:
+    #     print(elem)
+    #     print("data:", elem["data"])
+    #     print()
+
+
+def get_assignment_peer_reviews(course: canvasapi.course.Course, assignment_id: int):
+    assignment = course.get_assignment(assignment_id)
+    for submission in assignment.get_submissions():
+        student = Student(course, assignment, submission)
+    return 0
 
 
 main()
