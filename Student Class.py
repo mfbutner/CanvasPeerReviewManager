@@ -6,8 +6,7 @@ import json
 
 class Student:
 
-    def __init__(self, course, assignment, submission):
-
+    def __init__(self, course: canvasapi.course.Course, assignment, submission: canvasapi.submission):
         user_id = submission.user_id
         self.canvas_id = user_id
         self.sis_login_id = course.get_user(user_id).login_id
@@ -50,7 +49,7 @@ class Student:
         return std_dev
 
     @staticmethod
-    def get_reviews(self, course, assignment, submission):  # reviews have attribute "to_json"
+    def get_reviews(self, course: canvasapi.course.Course, assignment, submission):  # reviews have attribute "to_json"
         review_list = []
 
         for review in assignment.get_peer_reviews():
@@ -66,7 +65,7 @@ class Student:
 
 class StudentReview:
 
-    def __init__(self, course, assignment, review, submission):
+    def __init__(self, course: canvasapi.course.Course, assignment, review, submission):
         self.canvas_id = review.assessor_id
         self.sis_login_id = course.get_user(self.canvas_id).login_id
         self.student_id = 0
@@ -78,7 +77,7 @@ class StudentReview:
         self.total_score = 0
 
     @staticmethod
-    def get_reviewer_assessment(self, course, assignment, review, submission):
+    def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment, review, submission):
         assessment = {}
 
         rubric_id = assignment.rubric
@@ -90,39 +89,43 @@ class StudentReview:
 
 class AssignmentPeerReviews:
 
-    def __init__(self, assignment):
+    def __init__(self, course: canvasapi.course.Course, assignment):
         self.name = assignment.name
         self.assignment_id = assignment.id
+        self.students = self.make_students(course, assignment)
         self.mean = 0
         self.median = 0
         self.mode = 0
         self.std_dev = 0
 
+    def make_students(self, course: canvasapi.course.Course, assignment):
+        students = []
+        for submission in assignment.get_submissions():
+            student = Student(course, assignment, submission)
+            students.append(student)
+        return students
+
 
 def main():
     canvas = canvasapi.Canvas("https://canvas.ucdavis.edu", sys.argv[1])
     course = canvas.get_course(1599)
-    
-    get_assignment_peer_reviews()
 
-
-
-    # for rubric in course.get_rubrics():
-    #     print(rubric)
-    #
-    # r = course.get_rubric(14843, include=["peer_assessments"], style="full")
-    #
-    # for elem in r.assessments:
-    #     print(elem)
-    #     print("data:", elem["data"])
-    #     print()
+    AssignmentPR = get_assignment_peer_reviews(course, 348537)
 
 
 def get_assignment_peer_reviews(course: canvasapi.course.Course, assignment_id: int):
     assignment = course.get_assignment(assignment_id)
-    for submission in assignment.get_submissions():
-        student = Student(course, assignment, submission)
-    return 0
+    return AssignmentPeerReviews(course, assignment)
 
 
 main()
+
+# for rubric in course.get_rubrics():
+#     print(rubric)
+#
+# r = course.get_rubric(14843, include=["peer_assessments"], style="full")
+#
+# for elem in r.assessments:
+#     print(elem)
+#     print("data:", elem["data"])
+#     print()
