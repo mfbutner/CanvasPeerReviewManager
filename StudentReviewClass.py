@@ -1,8 +1,5 @@
-import sys
+from Main import *
 import canvasapi
-from typing import Iterable, List
-import csv
-import json
 
 
 # makes new StudentReview object for each reviewer of a particular assignment

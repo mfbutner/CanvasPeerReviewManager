@@ -1,5 +1,5 @@
-from Main import *
 from StudentReviewClass import *
+import canvasapi
 
 
 class Student:
