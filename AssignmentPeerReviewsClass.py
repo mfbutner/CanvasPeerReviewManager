@@ -2,7 +2,7 @@ import canvasapi
 from StudentClass import *
 
 
-class AssignmentPeerReview:
+class AssignmentPeerReview(object):
 
     def __init__(self, course: canvasapi.course.Course, assignment):
         self.name = assignment.name

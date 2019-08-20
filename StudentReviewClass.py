@@ -1,9 +1,8 @@
-from Main import *
 import canvasapi
 
 
 # makes new StudentReview object for each reviewer of a particular assignment
-class StudentReview:
+class StudentReview(object):
 
     def __init__(self, course: canvasapi.course.Course, assignment, review, submission):
         self.canvas_id = review.assessor_id

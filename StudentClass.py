@@ -1,8 +1,9 @@
 from StudentReviewClass import *
 import canvasapi
+import statistics
 
 
-class Student:
+class Student(object):
 
     def __init__(self, course: canvasapi.course.Course, assignment, submission: canvasapi.submission):
         user_id = submission.user_id
