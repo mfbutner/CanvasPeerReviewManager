@@ -24,3 +24,14 @@ class StudentReview:
         r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
         print(r.assessments["score"])
         return assessment
+
+    # for rubric in course.get_rubrics():
+    #     print(rubric)
+    #
+    # r = course.get_rubric(14843, include=["peer_assessments"], style="full")
+    #
+    # for elem in r.assessments:
+    #     print(elem)
+    #     print("data:", elem["data"])
+    #     print()
+
