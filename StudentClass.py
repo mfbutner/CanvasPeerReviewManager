@@ -20,7 +20,8 @@ class Student(object):
         self.mode = 0
         self.std_dev = 0
 
-        self.this_students_reviews = self.get_reviews(self, course, assignment)
+        # this student's reviews
+        self.reviews = self.get_reviews(self, course, assignment)
         self.get_student_peer_review_stats()
 
     @staticmethod
@@ -39,8 +40,11 @@ class Student(object):
 
     def get_student_peer_review_stats(self):
         data = []
-        for review in self.this_students_reviews:
+        for review in self.reviews:
             data.append(review.total_score)
+
+        print(self.first, " ", self.last)
+        print(data)
 
         if len(data) >= 1:
             self.mean = statistics.mean(data)

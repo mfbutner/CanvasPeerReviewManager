@@ -11,9 +11,8 @@ class StudentReview(object):
 
         # self.reviewer_name = course.get_user(self.canvas_id).name
         self.first, self.second = course.get_user(self.canvas_id).name.split()
-
-        self.rubric = self.get_reviewer_assessment(self, course, assignment)
         self.total_score = 0
+        self.rubric = self.get_reviewer_assessment(self, course, assignment)
 
     @staticmethod
     def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment):
@@ -22,8 +21,8 @@ class StudentReview(object):
         rubric_id = rubric.id
         r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
         for assessment in r.assessments:
-            self.total_score = assessment["score"]
             if assessment["assessor_id"] == self.canvas_id:     # makes sure review rubric belongs to reviewer
+                self.total_score = assessment["score"]
                 for each_category in assessment["data"]:
                     category = Category(each_category["points"], each_category["description"], each_category["comments"])
                     reviewer_assessment["categories"].append(category)

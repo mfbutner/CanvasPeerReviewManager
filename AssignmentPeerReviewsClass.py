@@ -24,7 +24,7 @@ class AssignmentPeerReview(object):
         # make iterable here
         data = []
         for student in self.students:
-            for review in student.this_students_reviews:
+            for review in student.reviews:
                 data.append(review.total_score)
 
         if len(data) >= 1:
