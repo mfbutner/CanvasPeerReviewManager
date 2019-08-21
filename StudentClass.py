@@ -32,14 +32,16 @@ class Student(object):
             student_name = course.get_user(student_id).name
 
             if self.name == student_name:           # matches name of this student to name on reviewed assignment
-                reviewer = StudentReview(course, assignment, review, submission)
+                reviewer = StudentReview(course, assignment, review)
                 review_list.append(reviewer)
 
         return review_list
 
     def get_student_peer_review_stats(self):
-        # make iterable here
         data = []
+        for review in self.this_students_reviews:
+            data.append(review.total_score)
+
         if len(data) >= 1:
             self.mean = statistics.mean(data)
             self.median = statistics.median(data)

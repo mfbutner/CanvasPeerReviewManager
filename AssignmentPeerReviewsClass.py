@@ -23,6 +23,10 @@ class AssignmentPeerReview(object):
     def get_peer_review_stats(self):
         # make iterable here
         data = []
+        for student in self.students:
+            for review in student.this_students_reviews:
+                data.append(review.total_score)
+
         if len(data) >= 1:
             self.mean = statistics.mean(data)
             self.median = statistics.median(data)
