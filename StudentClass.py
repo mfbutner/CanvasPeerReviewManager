@@ -9,8 +9,8 @@ class Student(object):
         user_id = submission.user_id
         self.canvas_id = user_id
         self.sis_login_id = course.get_user(user_id).login_id
-        self.name = course.get_user(user_id).name
-        self.first, self.last = self.name.split()
+        # self.name = course.get_user(user_id).name
+        self.first, self.last = course.get_user(user_id).name.split()
         self.student_id = 0
 
         self.late = submission.late
@@ -30,8 +30,8 @@ class Student(object):
         for review in assignment.get_peer_reviews():
             student_id = review.user_id                     # get name of student for peer review
             student_name = course.get_user(student_id).name
-
-            if self.name == student_name:           # matches name of this student to name on reviewed assignment
+            name = self.first + " " + self.last
+            if name == student_name:           # matches name of this student to name on reviewed assignment
                 reviewer = StudentReview(course, assignment, review)
                 review_list.append(reviewer)
 

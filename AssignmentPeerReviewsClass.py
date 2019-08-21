@@ -6,11 +6,11 @@ class AssignmentPeerReview(object):
     def __init__(self, course: canvasapi.course.Course, assignment):
         self.name = assignment.name
         self.assignment_id = assignment.id
-        self.students = self.make_students(course, assignment)
         self.mean = 0
         self.median = 0
         self.mode = 0
         self.std_dev = 0
+        self.students = self.make_students(course, assignment)
         self.get_peer_review_stats()
 
     def make_students(self, course: canvasapi.course.Course, assignment):
