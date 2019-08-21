@@ -19,10 +19,9 @@ class Student(object):
         self.median = 0
         self.mode = 0
         self.std_dev = 0
-        self.get_stats()
 
         self.this_students_reviews = self.get_reviews(self, course, assignment, submission)
-        self.rubric_stats = get_rubric_stats()
+        self.get_student_peer_review_stats()
 
     @staticmethod
     def get_reviews(self, course: canvasapi.course.Course, assignment, submission):  # reviews have attribute "to_json"
@@ -38,10 +37,18 @@ class Student(object):
 
         return review_list
 
-    def get_stats(self):
+    def get_student_peer_review_stats(self):
         # make iterable here
         data = []
-        self.mean = statistics.mean(data)
-        self.median = statistics.median(data)
-        self.mode = statistics.mode(data)
-        self.std_dev = statistics.stdev(data)
+        if len(data) >= 1:
+            self.mean = statistics.mean(data)
+            self.median = statistics.median(data)
+            self.mode = statistics.mode(data)
+        else:
+            self.mean = "N/A"
+            self.median = "N/A"
+            self.mode = "N/A"
+        if len(data) >= 2:
+            self.std_dev = statistics.stdev(data)
+        else:
+            self.std_dev = "N/A"

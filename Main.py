@@ -1,9 +1,7 @@
 import sys
-import canvasapi
 from typing import Iterable, List
 import csv
 import json
-import statistics
 from AssignmentPeerReviewsClass import *
 from StudentReviewClass import *
 
