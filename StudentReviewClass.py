@@ -37,14 +37,3 @@ class Category:
         self.score = points
         self.category_name = field
         self.comment = comment
-
-
-# for rubric in course.get_rubrics():
-#     print(rubric)
-#
-# r = course.get_rubric(14843, include=["peer_assessments"], style="full")
-# print(self.reviewer_name)
-# for elem in r.assessments:
-#     #print(elem)
-#     print("data:", elem["data"])
-#     print()
