@@ -4,7 +4,7 @@ import canvasapi
 # makes new StudentReview object for each reviewer of a particular assignment
 class StudentReview(object):
 
-    def __init__(self, course: canvasapi.course.Course, assignment, review, submission):
+    def __init__(self, course: canvasapi.course.Course, assignment, review):
         self.canvas_id = review.assessor_id
         self.sis_login_id = course.get_user(self.canvas_id).login_id
         self.student_id = 0
@@ -12,44 +12,39 @@ class StudentReview(object):
         self.reviewer_name = course.get_user(self.canvas_id).name
         self.first, self.second = self.reviewer_name.split()
 
-        self.rubric = self.get_reviewer_assessment(self, course, assignment, review, submission)
+        self.rubric = self.get_reviewer_assessment(self, course, assignment)
         self.total_score = 0
 
     @staticmethod
-    def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment, review, submission):
-        assessment = {}
+    def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment):
+        reviewer_assessment = {'categories': []}
+        rubric = course.get_rubrics(rubric_association_id=assignment.id)[0]
+        rubric_id = rubric.id
 
-        # rubric = course.get_rubrics(rubric_association_id=assignment.id)[0]
-        # rubric_id = rubric.id
-        #
-        # print(self.reviewer_name)
-        # try:
-        #     r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
-        #     print(r)
-        #     for field in r.assessments:
-        #         print(field)
-        #         print(field["score"])  # assessment["category"] =
-        # except canvasapi.exceptions.ResourceDoesNotExist:
-        #     print("None")
-        for rubric in course.get_rubrics():
-            print(rubric)
+        r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
+        for assessment in r.assessments:
+            self.total_score = assessment["score"]
+            for each_category in assessment["data"]:
+                category = Category(each_category["points"], each_category["description"], each_category["comments"])
+                reviewer_assessment["categories"].append(category)
 
-        r = course.get_rubric(14843, include=["peer_assessments"], style="full")
-
-        for elem in r.assessments:
-            print(elem)
-            print("data:", elem["data"])
-            print()
-
-        print()
-        return assessment
-
-
+        return reviewer_assessment
 
 
 class Category:
 
-    def __init__(self, rubric):
-        self.score = rubric.assessments["score"]
-        self.category_name = rubric.assessments["field"]
-        self.comment = rubric.assessments["comment"]
+    def __init__(self, points, field, comment):
+        self.score = points
+        self.category_name = field
+        self.comment = comment
+
+
+# for rubric in course.get_rubrics():
+#     print(rubric)
+#
+# r = course.get_rubric(14843, include=["peer_assessments"], style="full")
+# print(self.reviewer_name)
+# for elem in r.assessments:
+#     #print(elem)
+#     print("data:", elem["data"])
+#     print()
