@@ -42,18 +42,19 @@ class Student(object):
         data = []
         for review in self.reviews:
             data.append(review.total_score)
-        print(self.first, " ", self.last)
-        print(data)
 
-        if len(data) >= 1:
+        if len(data) >= 2:
+            self.std_dev = statistics.stdev(data)
             self.mean = statistics.mean(data)
             self.median = statistics.median(data)
             self.mode = statistics.mode(data)
+        elif len(data) == 1:
+            self.std_dev = statistics.stdev(data)
+            self.mean = statistics.mean(data)
+            self.median = statistics.median(data)
+            self.std_dev = "N/A"
         else:
             self.mean = "N/A"
             self.median = "N/A"
             self.mode = "N/A"
-        if len(data) >= 2:
-            self.std_dev = statistics.stdev(data)
-        else:
             self.std_dev = "N/A"
