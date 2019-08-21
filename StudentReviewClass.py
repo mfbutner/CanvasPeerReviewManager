@@ -19,18 +19,37 @@ class StudentReview(object):
     def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment, review, submission):
         assessment = {}
 
-        rubric_id = assignment.rubric
-        r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
-        print(r.assessments["score"])
+        # rubric = course.get_rubrics(rubric_association_id=assignment.id)[0]
+        # rubric_id = rubric.id
+        #
+        # print(self.reviewer_name)
+        # try:
+        #     r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
+        #     print(r)
+        #     for field in r.assessments:
+        #         print(field)
+        #         print(field["score"])  # assessment["category"] =
+        # except canvasapi.exceptions.ResourceDoesNotExist:
+        #     print("None")
+        for rubric in course.get_rubrics():
+            print(rubric)
+
+        r = course.get_rubric(14843, include=["peer_assessments"], style="full")
+
+        for elem in r.assessments:
+            print(elem)
+            print("data:", elem["data"])
+            print()
+
+        print()
         return assessment
 
-    # for rubric in course.get_rubrics():
-    #     print(rubric)
-    #
-    # r = course.get_rubric(14843, include=["peer_assessments"], style="full")
-    #
-    # for elem in r.assessments:
-    #     print(elem)
-    #     print("data:", elem["data"])
-    #     print()
 
+
+
+class Category:
+
+    def __init__(self, rubric):
+        self.score = rubric.assessments["score"]
+        self.category_name = rubric.assessments["field"]
+        self.comment = rubric.assessments["comment"]
