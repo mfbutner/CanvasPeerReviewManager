@@ -20,11 +20,11 @@ class Student(object):
         self.mode = 0
         self.std_dev = 0
 
-        self.this_students_reviews = self.get_reviews(self, course, assignment, submission)
+        self.this_students_reviews = self.get_reviews(self, course, assignment)
         self.get_student_peer_review_stats()
 
     @staticmethod
-    def get_reviews(self, course: canvasapi.course.Course, assignment, submission):  # reviews have attribute "to_json"
+    def get_reviews(self, course: canvasapi.course.Course, assignment):  # reviews have attribute "to_json"
         review_list = []
 
         for review in assignment.get_peer_reviews():
