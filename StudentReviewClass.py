@@ -19,11 +19,11 @@ class StudentReview(object):
         reviewer_assessment = {'categories': []}
         rubric = course.get_rubrics(rubric_association_id=assignment.id)[0]
         rubric_id = rubric.id
-        r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
+        r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")    # gets rubrics containing p.r.'s
         for assessment in r.assessments:
             if assessment["assessor_id"] == self.canvas_id:     # makes sure review rubric belongs to reviewer
                 self.total_score = assessment["score"]
-                for each_category in assessment["data"]:
+                for each_category in assessment["data"]:        # gets points from each category
                     category = Category(each_category["points"], each_category["description"], each_category["comments"])
                     reviewer_assessment["categories"].append(category)
 

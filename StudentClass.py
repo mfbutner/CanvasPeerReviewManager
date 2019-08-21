@@ -29,10 +29,10 @@ class Student(object):
         review_list = []
 
         for review in assignment.get_peer_reviews():
-            student_id = review.user_id                     # get name of student for peer review
+            student_id = review.user_id                 # get name of student for peer review
             student_name = course.get_user(student_id).name
             name = self.first + " " + self.last
-            if name == student_name:           # matches name of this student to name on reviewed assignment
+            if name == student_name:                    # matches name of this student to name on reviewed assignment
                 reviewer = StudentReview(course, assignment, review)
                 review_list.append(reviewer)
 

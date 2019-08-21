@@ -13,7 +13,8 @@ class AssignmentPeerReview(object):
         self.students = self.make_students(course, assignment)
         self.get_peer_review_stats()
 
-    def make_students(self, course: canvasapi.course.Course, assignment):
+    @staticmethod
+    def make_students(course: canvasapi.course.Course, assignment):
         students = []
         for submission in assignment.get_submissions():
             student = Student(course, assignment, submission)
@@ -21,9 +22,8 @@ class AssignmentPeerReview(object):
         return students
 
     def get_peer_review_stats(self):
-        # make iterable here
         data = []
-        for student in self.students:
+        for student in self.students:           # make iterable out of peer review scores
             for review in student.reviews:
                 data.append(review.total_score)
 
