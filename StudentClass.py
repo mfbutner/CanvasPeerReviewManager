@@ -42,7 +42,6 @@ class Student(object):
         data = []
         for review in self.reviews:
             data.append(review.total_score)
-
         print(self.first, " ", self.last)
         print(data)
 
