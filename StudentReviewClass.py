@@ -32,6 +32,7 @@ class StudentReview(object):
         return reviewer_assessment
 
 
+# makes new Category object for each category of the assessment found in rubric
 class Category:
 
     def __init__(self, points, field, comment):
