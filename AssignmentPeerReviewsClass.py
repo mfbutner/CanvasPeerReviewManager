@@ -32,12 +32,12 @@ class AssignmentPeerReview(object):
             self.mean = statistics.mean(data)
             self.median = statistics.median(data)
         else:
-            self.mode = "N/A"
-            self.mean = "N/A"
-            self.median = "N/A"
+            self.mode = "none"
+            self.mean = "none"
+            self.median = "none"
 
         if len(data) >= 2:
-            self.std_dev = statistics.stdev(data)
+            self.std_dev =  round(statistics.stdev(data), 2)
         else:
-            self.std_dev = "N/A"
+            self.std_dev = 0
 

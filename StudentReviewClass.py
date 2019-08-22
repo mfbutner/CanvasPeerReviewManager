@@ -11,6 +11,7 @@ class StudentReview(object):
 
         # self.reviewer_name = course.get_user(self.canvas_id).name
         self.first, self.second = course.get_user(self.canvas_id).name.split()
+        self.completed = False          # default to false, changed to true if assessment can be found
         self.total_score = 0
         self.rubric = self.get_reviewer_assessment(self, course, assignment)
 
@@ -22,6 +23,7 @@ class StudentReview(object):
         r = course.get_rubric(rubric_id, include=["peer_assessments"], style="full")    # gets rubrics containing p.r.'s
         for assessment in r.assessments:
             if assessment["assessor_id"] == self.canvas_id:     # makes sure review rubric belongs to reviewer
+                self.completed = True
                 self.total_score = assessment["score"]
                 for each_category in assessment["data"]:        # gets points from each category
                     category = Category(each_category["points"], each_category["description"], each_category["comments"])
