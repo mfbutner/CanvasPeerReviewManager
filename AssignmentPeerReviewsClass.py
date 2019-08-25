@@ -1,4 +1,4 @@
-from StudentClass import *
+from StudentClass import Student, canvasapi, statistics
 
 
 class AssignmentPeerReview(object):
@@ -37,7 +37,7 @@ class AssignmentPeerReview(object):
             self.median = "none"
 
         if len(data) >= 2:
-            self.std_dev =  round(statistics.stdev(data), 2)
+            self.std_dev = round(statistics.stdev(data), 2)
         else:
             self.std_dev = 0
 

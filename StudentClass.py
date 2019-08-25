@@ -1,4 +1,4 @@
-from StudentReviewClass import *
+from StudentReviewClass import StudentReview
 import canvasapi
 import statistics
 
