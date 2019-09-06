@@ -41,3 +41,19 @@ class AssignmentPeerReview(object):
         else:
             self.std_dev = 0
 
+    def to_dictionary(self):
+        peer_reviews = {"name": self.name,
+                        "assignment_id": self.assignment_id,
+                        "mean": self.mean,
+                        "median": self.median,
+                        "mode": self.mode,
+                        "std_dev": self.std_dev,
+                        "students": []
+                        }
+        students = []
+        for student in self.students:
+            dict = student.student_to_dictionary()
+            students.append(dict)
+        peer_reviews["students"] = dict
+
+        return peer_reviews

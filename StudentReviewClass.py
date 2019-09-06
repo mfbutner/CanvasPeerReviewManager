@@ -31,6 +31,24 @@ class StudentReview(object):
 
         return reviewer_assessment
 
+    def reviews_to_dictionary(review):
+        review = {"canvas_id": review.canvas_id,
+                  "sis_login_id": review.sis_login_id,
+                  "student_id": review.student_id,
+                  "first": review.first,
+                  "last": review.last,
+                  "completed the review": review.completed_the_review,
+                  "total score": review.total_score,
+                  "rubric": {}
+                  }
+        categories = []
+        for category in review.rubric:
+            dict = category.categories_to_dictionary()
+            categories.append(dict)
+
+        review["rubric"] = categories
+        return review
+
 
 # makes new Category object for each category of the assessment found in rubric
 class Category:
@@ -39,3 +57,9 @@ class Category:
         self.score = points
         self.category_name = field
         self.comment = comment
+
+    def categories_to_dictionary(self):
+        category = {"score": self.score,
+                    "category name": self.category_name,
+                    "comment": self.category}
+        return category

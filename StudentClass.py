@@ -56,3 +56,25 @@ class Student(object):
             self.std_dev = round(statistics.stdev(data), 2)
         else:
             self.std_dev = 0
+
+    def student_to_dictionary(self):
+        student = {"canvas_id": self.canvas_id,
+                   "sis_login_id": self.sis_login_id,
+                   "first": self.first,
+                   "last": self.last,
+                   "student_id": self.student_id,
+                   "late": self.late,
+                   "total": self.total,
+                   "mean": self.mean,
+                   "median": self.median,
+                   "mode": self.mode,
+                   "std_dev": self.std_dev,
+                   "reviews": []
+                    }
+        reviews = []
+        for review in self.reviews:
+            dict = review_to_dictionary(review)
+            reviews.append(dict)
+        student["reviews"] = reviews
+
+        return student
