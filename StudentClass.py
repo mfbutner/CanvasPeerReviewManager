@@ -73,7 +73,7 @@ class Student(object):
                     }
         reviews = []
         for review in self.reviews:
-            dict = review_to_dictionary(review)
+            dict = review.dict_reviews()
             reviews.append(dict)
         student["reviews"] = reviews
 

@@ -10,10 +10,11 @@ class StudentReview(object):
         self.student_id = 0
 
         # self.reviewer_name = course.get_user(self.canvas_id).name
-        self.first, self.second = course.get_user(self.canvas_id).name.split()
+        self.first, self.last = course.get_user(self.canvas_id).name.split()
         self.completed_the_review = False          # default to false, changed to true if assessment can be found
         self.total_score = 0
         self.rubric = self.get_reviewer_assessment(self, course, assignment)
+        self.dict_reviews = self.reviews_to_dictionary()
 
     @staticmethod
     def get_reviewer_assessment(self, course: canvasapi.course.Course, assignment):
@@ -31,18 +32,18 @@ class StudentReview(object):
 
         return reviewer_assessment
 
-    def reviews_to_dictionary(review):
-        review = {"canvas_id": review.canvas_id,
-                  "sis_login_id": review.sis_login_id,
-                  "student_id": review.student_id,
-                  "first": review.first,
-                  "last": review.last,
-                  "completed the review": review.completed_the_review,
-                  "total score": review.total_score,
+    def reviews_to_dictionary(self):
+        review = {"canvas_id": self.canvas_id,
+                  "sis_login_id": self.sis_login_id,
+                  "student_id": self.student_id,
+                  "first": self.first,
+                  "last": self.last,
+                  "completed the review": self.completed_the_review,
+                  "total score": self.total_score,
                   "rubric": {}
                   }
         categories = []
-        for category in review.rubric:
+        for category in self.rubric:
             dict = category.categories_to_dictionary()
             categories.append(dict)
 
