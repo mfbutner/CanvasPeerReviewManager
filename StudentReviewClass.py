@@ -40,14 +40,8 @@ class StudentReview(object):
                   "last": self.last,
                   "completed the review": self.completed_the_review,
                   "total score": self.total_score,
-                  "rubric": {}
+                  "rubric": self.rubric
                   }
-        categories = []
-        for category in self.rubric:
-            dict = category.categories_to_dictionary()
-            categories.append(dict)
-
-        review["rubric"] = categories
         return review
 
 
@@ -58,9 +52,3 @@ class Category:
         self.score = points
         self.category_name = field
         self.comment = comment
-
-    def categories_to_dictionary(self):
-        category = {"score": self.score,
-                    "category name": self.category_name,
-                    "comment": self.category}
-        return category
