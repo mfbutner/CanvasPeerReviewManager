@@ -2,7 +2,7 @@ import canvasapi
 from canvasapi import Canvas
 import collections
 from viewClass import view_Courses
-
+from methodtools import lru_cache
 
 class peerReviewer:
     def __init__(self, canvas : Canvas, user: canvasapi.user):
@@ -11,8 +11,7 @@ class peerReviewer:
         self.viewStack = collections.deque([view_Courses(canvas,user)])
         self.run()
 
-
-
+    @lru_cache()
     def run(self):
         print('Welcome To The Peer-Reviewer')
 

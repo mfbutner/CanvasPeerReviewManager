@@ -2,9 +2,11 @@ import canvasapi
 from canvasapi import Canvas
 import taskClass
 from student import student
-
+from methodtools import lru_cache
 
 class view:
+
+
     def __init__(self, canvas : Canvas, user: canvasapi.user):
         self.user = user
         self.canvas = canvas
@@ -13,16 +15,35 @@ class view:
         pass
         
 class view_peer_reviews(view):
-    def __init__(self, canvas: Canvas, user: canvasapi.user, course_id, assignment_id):
+
+    @lru_cache()
+    @staticmethod
+    def create(canvas: Canvas, user: canvasapi.user, course_id, assignment_id):
+        return view_peer_reviews(canvas, user, course_id, assignment_id)
+
+    def __init__(self, canvas: Canvas, user: canvasapi.user, course, assignment_id):
         super().__init__(canvas, user)
-        self.course = canvas.get_course(course_id)
+        self.course = course
         self.students = self.course.get_users(enrollment_type='student')
         self.assignment_id = assignment_id
         self.assignments = self.course.get_assignment(assignment_id)
+        self.reviews = self.assignments.get_peer_reviews()
         self.user_in = 0
+        self.rubric = self.get_rubric()
         self.students_list = self.make_students_list()
+
         pass
 
+    def generate_csv(self):
+        f = open(str(self.assignment_id) + "_peer_review.csv", "w+")
+        f.write("student,id,SIS login ID,peer_reviews_assigned,peer_reviews_completed\n")
+        for s in self.students_list:
+            f.write(str(s.name)+",")
+            f.write(str(s.id)+",")
+            f.write(str(s.login_id) + ",")
+            f.write(str(s.number_of_reviews_assigned)+",")
+            f.write(str(s.peer_reviews_completed)+"\n")
+        pass
 
     def get_rubric(self):
         rubric = self.course.get_rubrics(rubric_association_id=self.assignment_id, include=["peer_assessments"], style="full")[0]
@@ -39,12 +60,16 @@ class view_peer_reviews(view):
             return taskClass.backTask()
         elif self.user_in == 'q':
             return taskClass.quitTask()
+        elif self.user_in == '1':
+            self.generate_csv()
+            print("CSV generated. \n")
+            return self.run()
 
 
     def make_students_list(self):
         students_list = []
         for s in self.students :
-            students_list.append(student(self.canvas,s.id,self.course.id,self.assignment_id))
+            students_list.append(student(self.canvas,s.id,self.course,self.assignments,self.reviews, s.name,s.login_id,self.rubric))
 
         return students_list
 
@@ -77,7 +102,7 @@ class view_assignments(view):
         elif self.user_in == 'q':
             return taskClass.quitTask()
         else:
-            return taskClass.AddTask(view_peer_reviews(self.canvas,self.user,self.course_id,self.current_assignment_id))
+            return taskClass.AddTask(view_peer_reviews.create(self.canvas,self.user,self.course,self.current_assignment_id))
 
 
 

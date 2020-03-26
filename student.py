@@ -6,12 +6,16 @@ from peer_review_class import peer_review
 
 
 class student:
-    def __init__(self,canvas : Canvas, user_id, course_id, assignment_id):
+    def __init__(self,canvas : Canvas, user_id, course, assignment, reviews,name,login_id,rubric):
+
         self.canvas = canvas
         self.id = user_id
-        self.course_id = course_id
-        self.course = canvas.get_course(course_id)
-        self.assignment_id = assignment_id
+        self.rubric = rubric
+        self.name = name
+        self.reviews = reviews
+        self.login_id = login_id
+        self.course = course
+        self.assignment = assignment
         self.peer_reviews_completed = 0
         self.number_of_reviews_assigned = 0
         self.peer_reviews = self.get_peer_reviews_assigned()
@@ -21,11 +25,10 @@ class student:
 
     def get_peer_reviews_assigned(self):
         peer_reviews_assigned = []
-        reviews = self.course.get_assignment(self.assignment_id).get_peer_reviews()
-        for review in reviews :
+        for review in self.reviews :
             if review.assessor_id == self.id:
-                submission = self.course.get_assignment(self.assignment_id).get_submission(review.user_id)
-                peer_reviews_assigned.append(peer_review(self.canvas,self.course_id,submission,self.id))
+                submission = self.assignment.get_submission(review.user_id)
+                peer_reviews_assigned.append(peer_review(self.canvas,self.course,submission,self.id,self.rubric))
                 if review.workflow_state == 'completed' :
                     self.peer_reviews_completed = self.peer_reviews_completed +1
                 peer_reviews_assigned[-1].work_flow = review.workflow_state

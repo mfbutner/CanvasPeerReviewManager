@@ -1,20 +1,22 @@
 from canvasapi import Canvas
 import canvasapi
+from methodtools import lru_cache
+
 
 class peer_review:
-    def __init__(self,canvas : Canvas, course_id, submission: canvasapi.submission, assessor_id):
+
+    def __init__(self,canvas : Canvas, course, submission: canvasapi.submission, assessor_id, rubric):
+
         self.submission = submission
         self.submission_id = submission.id
         self.assessor_id = assessor_id
         self.user_id = submission.user_id
         self.assignment_id = submission.assignment_id
-        self.course = canvas.get_course(course_id)
+        self.course = course
         self.work_flow = 0
-        self.rubric = self.get_rubric()
+        self.rubric = rubric
         self.given_score = self.get_score()
         pass
-
-
 
     def get_score(self):
         assessments = self.rubric.assessments
@@ -25,9 +27,3 @@ class peer_review:
 
 
 
-
-    def get_rubric(self):
-        rubric = self.course.get_rubrics(rubric_association_id=self.assignment_id, include=["peer_assessments"], style="full")[0]
-        rubric_id = rubric.id
-        rubric = self.course.get_rubric(rubric_id, include=["peer_assessments"], style="full")
-        return rubric
