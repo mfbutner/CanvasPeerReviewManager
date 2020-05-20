@@ -167,8 +167,8 @@ class GuipeerReviewer:
 
         self.options_frame.delete(0, 'end')
         self.options_frame.insert('end',"Generate CSV")
-        self.options_frame.insert('end', "Creat Statistics Json")
-        self.options_frame.insert('end', "Creat Assignment & Upload Grades")
+        self.options_frame.insert('end', "Create Statistics Json")
+        self.options_frame.insert('end', "Create Assignment & Upload Grades")
         self.options_frame.insert('end', "Upload Grades to Existing Assignment")
         self.options_frame.bind('<<ListboxSelect>>', self.update_secondary_options_frame)
         self.secondary_options_frame.delete(0, 'end')

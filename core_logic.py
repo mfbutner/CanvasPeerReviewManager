@@ -130,7 +130,12 @@ def export_statistics(students_dict,rubric):
 
 
 def creat_new_assignment(reference_assignment,course,students_dict):
-
+    """
+    :param reference_assignment:
+    :param course:
+    :param students_dict:
+    :side effects:
+    """
     assignment = {}
     name = ("Peer Review For "+ reference_assignment.name)
     number_of_times_name_used = 0
@@ -150,6 +155,11 @@ def creat_new_assignment(reference_assignment,course,students_dict):
 
 
 def make_grade_dictionary(students_dict):
+    """
+
+    :param students_dict:
+    :return:
+    """
     grades_dict = {}
     for s in students_dict.values():
         grades_dict[s.id] = {'posted_grade' : s.peer_reviews_completed/s.number_of_reviews_assigned}
