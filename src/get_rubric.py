@@ -29,9 +29,6 @@ def get_peer_reviews_for_assignment(assignment: canvasapi.assignment.Assignment,
         rubric = course.get_rubric(rubric_id, include=['peer_assessments'], style='full')
         submissions = assignment.get_submissions(include=['user'])
         submission_map = {submission.id: submission.user for submission in submissions}
-        for submission in submissions:
-            print(submission.id)
-            # submission.user['id']
 
         for assessment in rubric.assessments:
             # if this assessment is for the assignment of interest
@@ -53,17 +50,6 @@ def print_peer_reviews(assignment: canvasapi.assignment.Assignment, course: canv
     for reviewer,reviewed in student_reviews.items():
         for review in reviewed.values():
             print(review)
-        # print('Reviewer:', review['reviewer'])
-        # print('\tReviewed:', review['reviewed'])
-        # print('\t\tOverall Comments')
-        # for comment in review['overall_comments']:
-        #     print(f'\t\t\t{comment}')
-        # if review['rubric_reviews'] is not None:
-        #     for criteria_name, evaluation in review['rubric_reviews'].items():
-        #         print(f'\t\tCriteria: {criteria_name}')
-        #         print(f'\t\t\tmax points: {evaluation["max_points"]}')
-        #         print(f'\t\t\tpoints: {evaluation["points"]}')
-        #         print(f'\t\t\tComments: {evaluation["comments"]}')
 
 
 def main():
@@ -74,18 +60,8 @@ def main():
     canvas_connection = canvasapi.Canvas(canvas_url, canvas_key)
     course = canvas_connection.get_course(course_id)
     me = course.get_user(240755)
-    # print(course)
     assignment = course.get_assignment(assignment_id)
     print_peer_reviews(assignment, course)
-    # print(type(course))
-    # print(assignment)
-    # if hasattr(assignment, 'rubric_settings'):
-    #     rubric_id = assignment.rubric_settings['id']
-    #     rubric = course.get_rubric(rubric_id, include=['peer_assessments'], style='full')
-    #     print(rubric)
-    # reviews = assignment.get_peer_reviews(include=['submission_comments', 'user'])
-    # for review in reviews:
-    #     print(review)
 
 
 if __name__ == '__main__':
