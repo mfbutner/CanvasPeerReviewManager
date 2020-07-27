@@ -1,0 +1,7 @@
+/.python-version
+*.csv
+*.json
+/build
+/dist
+/Peer_Reviewer.egg-info
+/.idea
