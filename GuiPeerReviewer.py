@@ -1,11 +1,13 @@
+import os
 import tkinter
-import core_logic
+from tkinter import filedialog
+import peer_reviewer_program
+from peer_reviewer_program import core_logic
 from canvasapi import Canvas
-import collections
-import canvasapi
-from VerticalScrolledFrame import VerticalScrolledFrame
-from PIL import ImageTk,Image
-import unittest
+from canvasapi import exceptions
+import Image
+import ImageTk
+
 
 
 class GuipeerReviewer:
@@ -32,17 +34,17 @@ class GuipeerReviewer:
         self.rubric=None
         self.upload_grades_to=None
         self.command=None
+        self.pop_up=None
         self.functions_list=[]
         self.build_header()
-        self.build_layout()
         self.root.mainloop()
 
     def build_header(self):
 
-        self.root.geometry("1200x600")
+        self.root.geometry("900x600")
         w = self.root.winfo_screenwidth()
         h = self.root.winfo_screenheight()
-        x = w / 2 - 1200 / 2
+        x = w / 2 - 900 / 2
         y = h / 2 - 600 / 2
         self.root.geometry("+%d+%d" % (x, y))
         self.root.title("Peer Reviewer")
@@ -51,24 +53,30 @@ class GuipeerReviewer:
         self.header.pack(side='top', fill='x')
         image_canvas = tkinter.Canvas(self.header, width=350, height=90)
         image_canvas.pack(side='left')
-        self.img = ImageTk.PhotoImage(Image.open("davis_cs.jpg"))
+        self.img = ImageTk.PhotoImage(Image.open(os.path.dirname(peer_reviewer_program.__file__)+"/davis_cs.jpg"))
         image_canvas.create_image(20, 20, anchor='nw', image=self.img)
         tkinter.Label(self.header, width=60, bg='#054b90', fg='#bd921d', text=" THE PEER REVIEWER",
                       font=("Verdana", 25)).pack(side='right', fill='y', pady=20)
 
         input_frame = tkinter.Frame(self.root)
         input_frame.pack(side='top',pady=40)
-        tkinter.Label(input_frame,text='Enter Your API_KEY:').pack(side='top')
+        label =tkinter.Label(input_frame,text='Enter Your API_KEY:')
+        label.pack(side='top')
         e1 = tkinter.Entry(input_frame,width=70)
         e1.pack(side='left')
 
         def submit():
             API_KEY=e1.get()
-            API_URL= "https://canvas.ucdavis.edu"
-            self.canvas = Canvas(API_URL, API_KEY)
-            self.user= self.canvas.get_current_user()
-            input_frame.destroy()
-            self.root.quit()
+            try:
+                API_URL= "https://canvas.ucdavis.edu"
+                self.canvas = Canvas(API_URL, API_KEY)
+                self.user= self.canvas.get_current_user()
+            except exceptions.ResourceDoesNotExist :
+                label.configure(text='INVALID API URL! TRY AGAIN.', fg ="red")
+            else:
+                input_frame.destroy()
+                self.root.quit()
+                self.build_layout()
 
         tkinter.Button(input_frame,text='submit',command = submit).pack(side='top')
         self.root.mainloop()
@@ -103,12 +111,6 @@ class GuipeerReviewer:
         self.options_frame = tkinter.Listbox(third_block, exportselection=0, width=250, height = 300)
         self.options_frame.pack(side='top')
 
-        fourth_block = tkinter.Frame(blocks, width=250, height=300)
-        fourth_block.pack_propagate(0)
-        fourth_block.pack(side='left', expand=True)
-        tkinter.Label(fourth_block, text="Secondary Options:").pack(side="top")
-        self.secondary_options_frame =tkinter.Listbox(fourth_block, exportselection=0, width=250, height=300)
-        self.secondary_options_frame.pack(side='top')
 
         self.message_frame = tkinter.Frame(self.root, width = 1000 )
         self.message_frame.pack(side='top')
@@ -131,6 +133,8 @@ class GuipeerReviewer:
         self.courses_frame.bind('<<ListboxSelect>>',self.update_assignments_frame)
 
     def update_assignments_frame(self,event):
+        if self.pop_up is not None:
+            self.pop_up.destroy()
         w = event.widget
         index = int(w.curselection()[0])
         course = self.favorite_courses[index]
@@ -139,7 +143,6 @@ class GuipeerReviewer:
         self.assignments = core_logic.get_assignments(course)
         self.assignments_frame.delete(0,'end')
         self.options_frame.delete(0, 'end')
-        self.secondary_options_frame.delete(0, 'end')
         self.pack_assignments()
 
     def pack_assignments(self):
@@ -148,11 +151,38 @@ class GuipeerReviewer:
         self.assignments_frame.bind('<<ListboxSelect>>', self.update_options_frame)
 
     def pack_assignments_to_upload_grades(self):
+        self.pop_up = tkinter.Toplevel()
+        self.pop_up.geometry("400x400")
+        w = self.root.winfo_screenwidth()
+        h = self.root.winfo_screenheight()
+        x = w / 2 - 400 / 2
+        y = h / 2 - 400 / 2
+        self.pop_up.geometry("+%d+%d" % (x, y))
+
+        fourth_block = tkinter.Frame(self.pop_up, width=250, height=300, pady=30)
+        self.pop_up.grid_columnconfigure(0, weight=1)
+        self.pop_up.grid_columnconfigure(2, weight=1)
+        self.pop_up.grid_rowconfigure(3, weight=1)
+        fourth_block.pack_propagate(0)
+        fourth_block.grid(row=1,column=1)
+        tkinter.Label(fourth_block, text="Upload grades to:").pack(side="top")
+        self.secondary_options_frame = tkinter.Listbox(fourth_block, exportselection=0, width=250, height=300)
+        self.secondary_options_frame.pack(side='left')
+
         for assignment in self.assignments:
             self.secondary_options_frame.insert('end',assignment.name)
-        self.secondary_options_frame.bind('<<ListboxSelect>>', self.validate_grade_upload)
+        self.secondary_options_frame.bind('<<ListboxSelect>>', self.closepopupwindow)
+
+    def closepopupwindow(self, event):
+        w = event.widget
+        index = int(w.curselection()[0])
+        self.upload_grades_to = self.assignments[index]
+        tkinter.Button(self.pop_up,text="confirm selection",command = lambda : self.validate_grade_upload()).grid(row=2,column=1)
+
 
     def update_options_frame(self, event):
+        if self.pop_up is not None:
+            self.pop_up.destroy()
         w = event.widget
         index = int(w.curselection()[0])
         a = self.assignments[index]
@@ -171,29 +201,27 @@ class GuipeerReviewer:
         self.options_frame.insert('end', "Create Assignment & Upload Grades")
         self.options_frame.insert('end', "Upload Grades to Existing Assignment")
         self.options_frame.bind('<<ListboxSelect>>', self.update_secondary_options_frame)
-        self.secondary_options_frame.delete(0, 'end')
 
-    def validate_grade_upload(self,event):
-        w = event.widget
-        index = int(w.curselection()[0])
-        self.upload_grades_to = self.assignments[index]
+    def validate_grade_upload(self):
+        self.pop_up.destroy()
         if core_logic.assignment_already_graded(self.upload_grades_to):
             core_logic.clear_frame(self.action_frame)
-            self.message_label.config(text="Assignment Has Existing Grades. Do You Want to Overwrite Grades?")
+            self.message_label.config(text= self.upload_grades_to.name + " Has Existing Grades. Do You Want to Overwrite Grades?")
             tkinter.Button(self.action_frame, text="Yes",
-                           command=lambda:self.pack_run_button()).pack(side="left")
+                           command=lambda: eval(self.command)).pack(side="left")
             tkinter.Button(self.action_frame, text="No",command=lambda:self.update_options_frame(self.selected_assignment)).pack(side="left")
         else:
             self.pack_run_button()
 
+
     def update_secondary_options_frame(self,event):
+        if self.pop_up is not None:
+            self.pop_up.destroy()
         w = event.widget
         index = int(w.curselection()[0])
         self.command=self.functions_list[index]
-        self.secondary_options_frame.delete(0, 'end')
         core_logic.clear_frame(self.action_frame)
         if index == 3 :
-            self.secondary_options_frame.delete(0, 'end')
             self.pack_assignments_to_upload_grades()
             self.message_label.config(text="Select and Assignment in the Secondary options menu to upload the grades.")
         else:
@@ -202,16 +230,23 @@ class GuipeerReviewer:
     def upload_grades(self, assignment):
         core_logic.clear_frame(self.action_frame)
         core_logic.upload_grades(assignment, core_logic.make_grade_dictionary(self.students_dict))
-        self.message_label.config(text="Grades Uploaded.")
+        self.message_label.config(text="Grades Uploaded to " + self.upload_grades_to.name + ".")
 
     def generate_csv(self):
-        core_logic.generate_csv(self.students_dict, self.selected_assignment.id)
+        path = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Select file",
+                                            initialfile = str(self.selected_assignment.id) + "_peer_review.csv",
+                                            filetypes=(("csv files", "*.csv"), ("all files", "*.*")))
+
+        core_logic.generate_csv(self.students_dict, self.selected_assignment.id, path,self.rubric)
         core_logic.clear_frame(self.action_frame)
         self.options_frame.selection_clear(0, 'end')
         self.message_label.config(text="CSV exported.\nselect another Option to continue.")
 
     def generate_stats(self):
-        core_logic.export_statistics(self.students_dict,self.rubric)
+        path = filedialog.asksaveasfilename(initialdir=os.getcwd(), title="Select file",
+                                            initialfile=str(self.selected_assignment.id) + "_statistics.json",
+                                            filetypes=(("json files", "*.json"), ("all files", "*.*")))
+        core_logic.export_statistics(self.students_dict,self.rubric,path)
         core_logic.clear_frame(self.action_frame)
         self.options_frame.selection_clear(0, 'end')
         self.message_label.config(text="Statistics JSON exported.\nselect another Option to continue.")

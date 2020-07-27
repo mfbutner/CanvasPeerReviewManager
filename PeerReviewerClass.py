@@ -1,19 +1,17 @@
 import canvasapi
 from canvasapi import Canvas
 import collections
-from view_courses import view_Courses
-import viewClass
+from peer_reviewer_program.view_courses import ViewCourses
 from methodtools import lru_cache
 import tkinter
-from tkinter import ttk
 
 
-class peerReviewer:
-    def __init__(self, canvas : Canvas, user: canvasapi.user):
+class PeerReviewer:
+    def __init__(self, canvas: Canvas, user: canvasapi.canvas.User):
         self.user = user
         self.root = tkinter.Tk()
         self.canvas = canvas
-        self.viewStack = collections.deque([view_Courses(canvas,user,self.root)])
+        self.viewStack = collections.deque([ViewCourses(canvas, user)])
         self.run()
 
     @lru_cache()
@@ -21,10 +19,3 @@ class peerReviewer:
         while self.viewStack:
             action = self.viewStack[-1].run()
             action.do(self.viewStack)
-
-
-
-
-
-
-
