@@ -9,6 +9,9 @@ Peer Review Manager is Python application that helps
 ## Canvas API Access Key
 To use this application you will need to receive your Canvas API 
 key. To do so, Follow tho instructions at the [canvas website](https://community.canvaslms.com/t5/Admin-Guide/How-do-I-obtain-an-API-access-token-in-the-Canvas-Data-Portal/ta-p/157).
+## Pre Installed Version
+A pre-installed GUI version of the program is provided in dist/runGui.
+All you have to do is click on it.
 ## Installation
 You can run the pre installed GUI version of the program by just clicking on the provided excutable file: rungui.
 
