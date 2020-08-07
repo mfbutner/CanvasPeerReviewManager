@@ -1,5 +1,0 @@
-('/usr/local/lib/python3.7/site-packages/six-1.15.0-py3.7.egg',
- None,
- {'*.pyc', '*.so', '*.cpython-37m-darwin.so', 'EGG-INFO', '*.py', '*.abi3.so'},
- 'DATA',
- [])

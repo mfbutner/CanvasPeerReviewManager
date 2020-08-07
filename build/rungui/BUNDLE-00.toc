@@ -1,3 +1,0 @@
-([('rungui',
-   '/Users/hamid/CanvasPeerReviewManager/dist/rungui',
-   'EXECUTABLE')],)
