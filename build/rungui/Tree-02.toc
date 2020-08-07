@@ -1,0 +1,7 @@
+('/usr/local/lib/python3.7/site-packages/certifi-2020.4.5.1-py3.7.egg',
+ None,
+ {'*.pyc', '*.so', '*.cpython-37m-darwin.so', 'EGG-INFO', '*.py', '*.abi3.so'},
+ 'DATA',
+ [('certifi/cacert.pem',
+   '/usr/local/lib/python3.7/site-packages/certifi-2020.4.5.1-py3.7.egg/certifi/cacert.pem',
+   'DATA')])

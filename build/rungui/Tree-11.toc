@@ -1,0 +1,5 @@
+('/Users/hamid/CanvasPeerReviewManager/build/rungui/Pillow_PIL-0.1.dev0-py3.7.egg',
+ None,
+ {'*.pyc', '*.so', '*.cpython-37m-darwin.so', 'EGG-INFO', '*.py', '*.abi3.so'},
+ 'DATA',
+ [])
