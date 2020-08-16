@@ -138,7 +138,7 @@ def make_students_dict(students: [canvasapi.canvas.User], course: canvasapi.canv
     """
     students_dict = {}
     for s in students:
-        students_dict[s.id] = (Student(s.id, course, assignment, s.name, s.login_id))
+        students_dict[s.id] = (Student(s.id, course, assignment, s.name))
     submissions_dict = make_submissions_dict(assignment)
     update_peer_reviews(reviews, students_dict, course, submissions_dict, rubric)
     return students_dict
@@ -166,7 +166,6 @@ def generate_csv(students_dict: typing.Dict[int, Student], assignment_id: int, p
     for s in students_dict.values():
         f.write(str(s.name) + ",")
         f.write(str(s.id) + ",")
-        f.write(str(s.login_id) + ",")
         f.write(str(s.number_of_reviews_assigned) + ",")
         f.write(str(s.peer_reviews_completed) + "\n")
 
@@ -293,13 +292,15 @@ def export_statistics(students_dict: typing.Dict[int, Student], rubric: canvasap
 
 
 def creat_new_assignment(reference_assignment: canvasapi.assignment, course: canvasapi.canvas.Course,
-                         students_dict: typing.Dict[int, Student]):
+                         students_dict: typing.Dict[int, Student], assignment_group_id):
     """
     --creates a new assignment inside the course
     :param reference_assignment: the new assignment inherits its name from the refrence assignment
     :param course: the course in which the assignment is created
     :param students_dict: student's dictionary is used to generate grades and upload the the new assignment
+    :param assignment_group_id
     :side effects: the new assignment will not show up in the assignments view until the view is updated
+
     """
     assignment = {}
     name = ("Peer Review For " + reference_assignment.name)
@@ -317,6 +318,7 @@ def creat_new_assignment(reference_assignment: canvasapi.assignment, course: can
     assignment['published'] = True
     assignment['points_possible'] = 100
     assignment['grading_type'] = "percent"
+    assignment['assignment_group_id'] = assignment_group_id
     new_assignment = course.create_assignment(assignment)
     new_assignment.submissions_bulk_update(grade_data=make_grade_dictionary(students_dict))
 
@@ -347,6 +349,13 @@ def assignment_already_graded(assignment: canvasapi.assignment) -> bool:
             return True
     else:
         return False
+
+
+def get_assignment_groups(course: canvasapi.canvas.Course):
+    """
+    returns assignment groups for a given course
+    """
+    return course.get_assignment_groups()
 
 
 def upload_grades(assignment: canvasapi.assignment, grade_dict: typing.Dict[int, typing.Dict]):

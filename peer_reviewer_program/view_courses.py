@@ -22,6 +22,7 @@ class ViewCourses(view):
         After selecting a course this method adds a ViewAssignments instance to the program task stack.
 
         """
+        print()
         if self.print_all_courses:
             core_logic.print_courses(self.courses)
         else:

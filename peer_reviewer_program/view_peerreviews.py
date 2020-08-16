@@ -50,7 +50,22 @@ class ViewPeerReviews(view):
             return self.run()
 
         elif self.user_in == '2':
-            core_logic.creat_new_assignment(self.assignments,self.course,self.students_dict)
+            assignment_groups =core_logic.get_assignment_groups(self.course)
+            print()
+
+            while(True):
+                try:
+                    i = 1
+                    for group in assignment_groups:
+                        print(i, ')', group.name)
+                        i += 1
+                    group_index = int(input("please select an assignment group to make an assignment: ")) - 1
+                    core_logic.creat_new_assignment(self.assignments, self.course, self.students_dict,
+                                                    assignment_groups[group_index].id )
+                    break
+                except (ValueError, IndexError, AttributeError):
+                    print("\ninvalid input please try again.\n")
+
             print("Assignment Created.")
             return self.run()
 

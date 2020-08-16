@@ -1,11 +1,10 @@
 
 
 class Student:
-    def __init__(self, user_id, course, assignment,name,login_id):
+    def __init__(self, user_id, course, assignment,name):
 
         self.id = user_id
         self.name = name
-        self.login_id = login_id
         self.course = course
         self.assignment = assignment
         self.peer_reviews_completed = 0
