@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['peer_reviewer_program/rungui.py'],
-             pathex=['/Users/hamid/CanvasPeerReviewManager'],
+             pathex=['/Users/rez/Desktop/setup'],
              binaries=[],
-             datas=[('peer_reviewer_program/davis_cs.jpg', './peer_reviewer_program')],
+             datas=[('peer_reviewer_program/davis_cs.jpg', 'peer_reviewer_program')],
              hiddenimports=['pkg_resources.py2_warn'],
              hookspath=[],
              runtime_hooks=[],

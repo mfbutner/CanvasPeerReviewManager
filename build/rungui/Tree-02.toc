@@ -1,0 +1,5 @@
+('/Users/rez/opt/miniconda3/lib/python3.7/site-packages/canvasapi-1.0.0-py3.7.egg',
+ None,
+ {'*.pyc', 'EGG-INFO', '*.py', '*.cpython-37m-darwin.so', '*.abi3.so', '*.so'},
+ 'DATA',
+ [])

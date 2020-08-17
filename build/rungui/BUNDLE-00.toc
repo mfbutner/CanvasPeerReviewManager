@@ -1,0 +1,1 @@
+([('rungui', '/Users/rez/Desktop/setup/dist/rungui', 'EXECUTABLE')],)

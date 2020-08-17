@@ -27,11 +27,12 @@ cd into the project folder and run setup.py to install the program and its depen
 cd CanvasPeerReviewManager/
 Python3 setup.py install  
 ```
- To install the clickable version similar to the one already provided make sure you have pyinstaller and python 3.7 or less installed and
+ To install the clickable version similar to the one already provided make sure you have pyinstaller and python installed and
  run the following command in the project directory:
  ```bash
-pyinstaller -F --add-data "davis_cs.jpg;davis_cs.jpg" --hidden-import='pkg_resources.py2_warn' peer_reviewer_program/rungui.py --onefile --clean --windowed
+pyinstaller -F --add-data "peer_reviewer_program/davis_cs.jpg:peer_reviewer_program" --hidden-import='pkg_resources.py2_warn' peer_reviewer_program/rungui.py --onefile --clean --windowed
 ```
+The clickable installed version will be in the dist folder.
 ## Usage (Manual Installation)
 After the installation is complete you can run the terminal version of the program by running this command in a terminal session:
 ```bash
