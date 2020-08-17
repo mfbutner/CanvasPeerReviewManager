@@ -35,6 +35,8 @@ class GuipeerReviewer:
         self.upload_grades_to=None
         self.command=None
         self.pop_up=None
+        self.assignment_groups= None
+        self.selected_assignment_group= None
         self.functions_list=[]
         self.build_header()
         self.root.mainloop()
@@ -173,6 +175,36 @@ class GuipeerReviewer:
             self.secondary_options_frame.insert('end',assignment.name)
         self.secondary_options_frame.bind('<<ListboxSelect>>', self.closepopupwindow)
 
+    def pack_assignment_groups(self):
+        self.pop_up = tkinter.Toplevel()
+        self.pop_up.geometry("400x400")
+        w = self.root.winfo_screenwidth()
+        h = self.root.winfo_screenheight()
+        x = w / 2 - 400 / 2
+        y = h / 2 - 400 / 2
+        self.pop_up.geometry("+%d+%d" % (x, y))
+
+        fourth_block = tkinter.Frame(self.pop_up, width=250, height=300, pady=30)
+        self.pop_up.grid_columnconfigure(0, weight=1)
+        self.pop_up.grid_columnconfigure(2, weight=1)
+        self.pop_up.grid_rowconfigure(3, weight=1)
+        fourth_block.pack_propagate(0)
+        fourth_block.grid(row=1,column=1)
+        tkinter.Label(fourth_block, text="Select an assignment group:").pack(side="top")
+        self.secondary_options_frame = tkinter.Listbox(fourth_block, exportselection=0, width=250, height=300)
+        self.secondary_options_frame.pack(side='left')
+        self.assignment_groups = core_logic.get_assignment_groups(self.selected_course)
+        for group in self.assignment_groups:
+            self.secondary_options_frame.insert('end',group.name)
+        self.secondary_options_frame.bind('<<ListboxSelect>>', self.closeAssigmentgroupWideow)
+
+    def closeAssigmentgroupWideow(self, event):
+        w = event.widget
+        index = int(w.curselection()[0])
+        self.selected_assignment_group = self.assignment_groups[index]
+        tkinter.Button(self.pop_up, text="confirm selection", command=lambda: self.validate_assignment_creation()).grid(row=2,
+                                                                                                                 column=1)
+
     def closepopupwindow(self, event):
         w = event.widget
         index = int(w.curselection()[0])
@@ -213,6 +245,11 @@ class GuipeerReviewer:
         else:
             self.pack_run_button()
 
+    def validate_assignment_creation(self):
+        self.pop_up.destroy()
+        self.pack_run_button()
+
+
 
     def update_secondary_options_frame(self,event):
         if self.pop_up is not None:
@@ -223,7 +260,10 @@ class GuipeerReviewer:
         core_logic.clear_frame(self.action_frame)
         if index == 3 :
             self.pack_assignments_to_upload_grades()
-            self.message_label.config(text="Select and Assignment in the Secondary options menu to upload the grades.")
+            self.message_label.config(text="Select and assignment in the secondary options menu to upload the grades.")
+        elif index== 2:
+            self.pack_assignment_groups()
+            self.message_label.config(text="Select and assignment group.")
         else:
             self.pack_run_button()
 
@@ -252,7 +292,8 @@ class GuipeerReviewer:
         self.message_label.config(text="Statistics JSON exported.\nselect another Option to continue.")
 
     def create_assignment(self):
-        core_logic.creat_new_assignment(self.selected_assignment,self.selected_course,self.students_dict)
+        core_logic.creat_new_assignment(self.selected_assignment,self.selected_course,self.students_dict,
+                                        self.selected_assignment_group.id)
         core_logic.clear_frame(self.action_frame)
         self.assignments=core_logic.get_assignments(self.selected_course)
         self.assignments_frame.delete(0, 'end')
