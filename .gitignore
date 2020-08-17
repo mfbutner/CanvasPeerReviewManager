@@ -4,3 +4,5 @@
 /Peer_Reviewer.egg-info
 /.idea
 /venv/
+/build
+/dist
