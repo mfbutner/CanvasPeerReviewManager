@@ -260,10 +260,10 @@ class GuipeerReviewer:
         core_logic.clear_frame(self.action_frame)
         if index == 3 :
             self.pack_assignments_to_upload_grades()
-            self.message_label.config(text="Select and assignment in the secondary options menu to upload the grades.")
+            self.message_label.config(text="Select an assignment in the secondary options menu to upload the grades.")
         elif index== 2:
             self.pack_assignment_groups()
-            self.message_label.config(text="Select and assignment group.")
+            self.message_label.config(text="Select an assignment group.")
         else:
             self.pack_run_button()
 
