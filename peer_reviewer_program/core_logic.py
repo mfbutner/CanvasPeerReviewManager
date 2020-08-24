@@ -43,6 +43,13 @@ def get_assignments(course: canvasapi.canvas.Course) -> [canvasapi.assignment]:
     """
     return course.get_assignments()
 
+def get_assignments_with_peer_reviews(course):
+    """
+       :param course: canvas course object
+       :return: a list of canvas assignment objects that have peer reviews assigned to them
+       """
+    return [assignment for assignment in course.get_assignments() if assignment.peer_reviews]
+
 
 def get_assignment(course: canvasapi.canvas.Course, assignment_id: int):
     """
@@ -334,7 +341,8 @@ def make_grade_dictionary(students_dict: typing.Dict[int, Student]) -> typing.Di
         for review in s.peer_reviews:
             if review.work_flow == "completed" or review.submission.workflow_state == "unsubmitted":
                 completed += 1
-        grades_dict[s.id] = {'posted_grade': completed / s.number_of_reviews_assigned * 100}
+        if s.number_of_reviews_assigned:
+            grades_dict[s.id] = {'posted_grade': completed / s.number_of_reviews_assigned * 100}
     return grades_dict
 
 
@@ -372,3 +380,5 @@ def clear_frame(frame: tkinter.Frame):
     """
     for widget in frame.winfo_children():
         widget.destroy()
+
+

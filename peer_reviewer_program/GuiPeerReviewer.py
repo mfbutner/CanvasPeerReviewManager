@@ -61,26 +61,34 @@ class GuipeerReviewer:
                       font=("Verdana", 25)).pack(side='right', fill='y', pady=20)
 
         input_frame = tkinter.Frame(self.root)
-        input_frame.pack(side='top',pady=40)
-        label =tkinter.Label(input_frame,text='Enter Your API_KEY:')
+        input_frame.pack(side='top',pady=20)
+        label =tkinter.Label(input_frame,text='Enter Your Canvas URL:')
         label.pack(side='top')
         e1 = tkinter.Entry(input_frame,width=70)
+        e1.insert(0, 'https://canvas.ucdavis.edu')
         e1.pack(side='left')
+        input_frame2 = tkinter.Frame(self.root)
+        input_frame2.pack(side='top', )
+        label2 = tkinter.Label(input_frame2, text='Enter Your API_KEY:')
+        label2.pack(side='top')
+        e2 = tkinter.Entry(input_frame2, width=70)
+        e2.pack(side='top')
 
         def submit():
-            API_KEY=e1.get()
             try:
-                API_URL= "https://canvas.ucdavis.edu"
+                API_URL= e1.get()
+                API_KEY = e2.get()
                 self.canvas = Canvas(API_URL, API_KEY)
                 self.user= self.canvas.get_current_user()
-            except exceptions.ResourceDoesNotExist :
-                label.configure(text='INVALID API URL! TRY AGAIN.', fg ="red")
+            except :
+                label.configure(text='INVALID API KEY/URL! TRY AGAIN.', fg ="red")
             else:
                 input_frame.destroy()
+                input_frame2.destroy()
                 self.root.quit()
                 self.build_layout()
 
-        tkinter.Button(input_frame,text='submit',command = submit).pack(side='top')
+        tkinter.Button(input_frame2,text='submit',command = submit).pack(side='bottom',pady=20)
         self.root.mainloop()
 
 
@@ -142,7 +150,7 @@ class GuipeerReviewer:
         course = self.favorite_courses[index]
         self.message_label.config(text="You Selected "+ course.name+". Select an Assignment to Continue.")
         self.selected_course = course
-        self.assignments = core_logic.get_assignments(course)
+        self.assignments = core_logic.get_assignments_with_peer_reviews(course)
         self.assignments_frame.delete(0,'end')
         self.options_frame.delete(0, 'end')
         self.pack_assignments()
@@ -295,7 +303,7 @@ class GuipeerReviewer:
         core_logic.creat_new_assignment(self.selected_assignment,self.selected_course,self.students_dict,
                                         self.selected_assignment_group.id)
         core_logic.clear_frame(self.action_frame)
-        self.assignments=core_logic.get_assignments(self.selected_course)
+        self.assignments=core_logic.get_assignments_with_peer_reviews(self.selected_course)
         self.assignments_frame.delete(0, 'end')
         self.pack_assignments()
         self.message_label.config(text="New Assignment Created.\nselect another Option to continue.")

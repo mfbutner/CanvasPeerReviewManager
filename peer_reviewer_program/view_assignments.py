@@ -12,7 +12,7 @@ class ViewAssignments(view):
         self.course_id = course_id
         self.canvas = canvas
         self.course = core_logic.get_course(self.canvas, self.course_id)
-        self.assignments = core_logic.get_assignments(self.course)
+        self.assignments = core_logic.get_assignments_with_peer_reviews(self.course)
         self.user_in = None
         self.current_assignment_id = None
 
