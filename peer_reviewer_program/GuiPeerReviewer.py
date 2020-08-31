@@ -95,8 +95,8 @@ class GuipeerReviewer:
 
 
     def build_layout(self):
-        self.courses = core_logic.get_courses(self.user)
-        self.favorite_courses = core_logic.get_favorite_courses(self.user)
+        self.courses = core_logic.get_courses_enrolled_in_by_role(core_logic.get_courses,user=self.user)
+        self.favorite_courses = core_logic.get_courses_enrolled_in_by_role(core_logic.get_favorite_courses,user=self.user)
         blocks = tkinter.Frame(self.root,height = 400)
         blocks.pack(side='top', fill='x')
 

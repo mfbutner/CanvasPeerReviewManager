@@ -15,6 +15,31 @@ import tkinter
 import enum
 from typing import Callable, TypeVar, Iterable, List
 
+
+
+def get_courses(user: canvasapi) -> [canvasapi.canvas.Course]:
+    """
+    :param user: canvas user object
+    :return: a list of canvas course objects
+    """
+    return user.get_courses()
+
+
+def get_favorite_courses(user: canvasapi.canvas.User) -> [canvasapi.canvas.Course]:
+    """
+    :param user: canvas user object
+    :return: a list of canvas course objects
+    """
+    return user.get_favorite_courses()
+
+
+def get_course(canvas: Canvas, course_id: int) -> canvasapi.canvas.Course:
+    """
+    :param canvas: canvas object
+    :return: canvas course object
+    """
+    return canvas.get_course(course_id)
+
 T = TypeVar('T')
 
 
@@ -40,38 +65,15 @@ def get_courses_enrolled_in_by_role(lookup_method: Callable[..., Iterable[canvas
     roles = {role.value for role in roles}
     courses = list()
     for course in lookup_method(**kwargs):
-        for enrollment in course.enrollments:
-            if enrollment['type'] in roles:
-                courses.append(course)
-                break
+        try:
+            for enrollment in course.enrollments:
+                if enrollment['type'] in roles:
+                    courses.append(course)
+                    break
+        except:
+            pass
     return courses
 
-
-# -------------------End New Stuff -------------------------------
-
-
-def get_courses(user: canvasapi) -> [canvasapi.canvas.Course]:
-    """
-    :param user: canvas user object
-    :return: a list of canvas course objects
-    """
-    return user.get_courses()
-
-
-def get_favorite_courses(user: canvasapi.canvas.User) -> [canvasapi.canvas.Course]:
-    """
-    :param user: canvas user object
-    :return: a list of canvas course objects
-    """
-    return user.get_favorite_courses()
-
-
-def get_course(canvas: Canvas, course_id: int) -> canvasapi.canvas.Course:
-    """
-    :param canvas: canvas object
-    :return: canvas course object
-    """
-    return canvas.get_course(course_id)
 
 
 def get_assignments(course: canvasapi.canvas.Course) -> [canvasapi.assignment]:
@@ -208,7 +210,7 @@ def generate_csv(students_dict: typing.Dict[int, Student], assignment_id: int, p
     if path is None:
         path = os.getcwd() + str(assignment_id) + "_peer_review.csv"
     f = open(path, "w+")
-    f.write("student,id,SIS login ID,peer_reviews_assigned,peer_reviews_completed\n")
+    f.write("student,id,peer_reviews_assigned,peer_reviews_completed\n")
     for s in students_dict.values():
         f.write(str(s.name) + ",")
         f.write(str(s.id) + ",")

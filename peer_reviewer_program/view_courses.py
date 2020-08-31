@@ -9,8 +9,8 @@ from peer_reviewer_program import core_logic
 class ViewCourses(view):
     def __init__(self, canvas: Canvas, user: canvasapi.canvas.User):
         super().__init__(canvas, user)
-        self.courses = core_logic.get_courses(user)
-        self.favorite_courses = core_logic.get_favorite_courses(user)
+        self.courses = core_logic.get_courses_enrolled_in_by_role(core_logic.get_courses,user=user)
+        self.favorite_courses = core_logic.get_courses_enrolled_in_by_role(core_logic.get_favorite_courses,user=user)
         self.print_all_courses = False
         self.user_in = None
         self.course_id = 0

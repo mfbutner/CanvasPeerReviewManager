@@ -27,15 +27,17 @@ class ViewAssignments(view):
         print('b ) back\nq ) quit')
         self.user_in = input("Enter the number of the assignment you want to grade or enter : ").strip()
 
-        try:
-            self.current_assignment_id = self.assignments[int(self.user_in) - 1].id
-        except (ValueError, IndexError, AttributeError):
-            print("\ninvalid input please try again.")
-            return self.run()
+
         if self.user_in == 'b':
             return taskClass.BackTask()
         elif self.user_in == 'q':
             return taskClass.QuitTask()
         else:
-            return taskClass.AddTask(
-                ViewPeerReviews.create(self.canvas, self.user, self.course, self.current_assignment_id))
+            try:
+                self.current_assignment_id = self.assignments[int(self.user_in) - 1].id
+                return taskClass.AddTask(
+                    ViewPeerReviews.create(self.canvas, self.user, self.course, self.current_assignment_id))
+            except (ValueError, IndexError, AttributeError):
+                print("\ninvalid input please try again.")
+                return self.run()
+
